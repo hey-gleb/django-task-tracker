@@ -22,5 +22,6 @@ PUBLIC_API_PREFIX = 'api/'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path(PUBLIC_API_PREFIX, include('projects.urls'))
+    path(PUBLIC_API_PREFIX, include('projects.urls')),
+    path(PUBLIC_API_PREFIX, include('tasks.urls'))
 ]
