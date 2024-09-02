@@ -1,6 +1,7 @@
 from rest_framework import generics
 from rest_framework.exceptions import PermissionDenied
 
+from projects.pagination import QueryPageNumberPagination
 from tasks.serializers import TaskSerializer, TimeLogSerializer
 from tasks.models import Task, TimeLog
 
@@ -8,6 +9,7 @@ from tasks.models import Task, TimeLog
 class TaskList(generics.ListCreateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    pagination_class = QueryPageNumberPagination
 
     def perform_create(self, serializer):
         project = serializer.validated_data['project']

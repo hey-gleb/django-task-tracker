@@ -182,6 +182,8 @@ REST_AUTH = {
     'USE_JWT': True,
     'JWT_AUTH_COOKIE': 'auth',
     'JWT_AUTH_HTTPONLY': False,
+    'DEFAULT_PAGINATION_CLASS': 'projects.pagination.QueryPageNumberPagination',
+    'PAGE_SIZE': 10,
 }
 
 # settings.py

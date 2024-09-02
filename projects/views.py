@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from projects.models import Project
+from projects.pagination import QueryPageNumberPagination
 from projects.permissions import IsManager
 from projects.serializers import ProjectSerializer, AddMembersSerializer, CustomRegisterSerializer
 from tasks.models import TimeLog
@@ -17,6 +18,7 @@ from tasks.models import TimeLog
 class ProjectList(generics.ListCreateAPIView):
     serializer_class = ProjectSerializer
     permission_classes = [IsManager, IsAuthenticated]
+    pagination_class = QueryPageNumberPagination
 
     def perform_create(self, serializer):
         project = serializer.save(user=self.request.user)
