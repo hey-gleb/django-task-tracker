@@ -1,5 +1,6 @@
 import uuid
 
+from django.contrib.auth.models import User
 from django.db import models
 
 from projects.models import Project
@@ -8,6 +9,7 @@ from projects.models import Project
 class Task(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     project = models.ForeignKey(Project, related_name='projects', on_delete=models.CASCADE)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
@@ -24,10 +26,13 @@ class Task(models.Model):
 
 class TimeLog(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # TODO rename to time_logs
     task = models.ForeignKey(Task, related_name='timelogs', on_delete=models.CASCADE)
     # TODO add validation
     hours_spent = models.FloatField()
     description = models.TextField(blank=True, null=True)
+    # TODO rename to created_at
     logged_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

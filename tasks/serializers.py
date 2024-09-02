@@ -6,10 +6,11 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = '__all__'
+        read_only_fields = ['id', 'created_by']
 
 
 class TimeLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = TimeLog
         fields = ['id', 'task', 'hours_spent', 'description', 'logged_at']
-        read_only_fields = ['id', 'logged_at']
+        read_only_fields = ['id', 'user', 'task', 'logged_at']
