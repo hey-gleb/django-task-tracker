@@ -149,9 +149,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # Replace with your email provider's SMTP server
 EMAIL_PORT = 587  # Common SMTP port for TLS
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'mr.heylovskiy@gmail.com'  # Replace with your email address
-# # TODO remove passwords
-EMAIL_HOST_PASSWORD = 'acwkdnxlivvqvcjf'  # Replace with your email password
+EMAIL_HOST_USER = ''  # Replace with your email address
+EMAIL_HOST_PASSWORD = ''  # Replace with your email password
 DEFAULT_FROM_EMAIL = 'task-tracker@gmail.com'
 
 # Django Allauth settings
@@ -185,7 +184,14 @@ REST_AUTH = {
     'JWT_AUTH_HTTPONLY': False,
 }
 
-# Rest Auth settings
-REST_AUTH_SERIALIZERS = {
-    'LOGIN_SERIALIZER': 'your_app.serializers.CustomLoginSerializer',
+# settings.py
+
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'projects.serializers.CustomRegisterSerializer',
 }
+
+
+# # Rest Auth settings
+# REST_AUTH_SERIALIZERS = {
+#     'LOGIN_SERIALIZER': 'your_app.serializers.CustomLoginSerializer',
+# }

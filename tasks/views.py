@@ -3,6 +3,7 @@ from rest_framework import generics
 from tasks.serializers import TaskSerializer, TimeLogSerializer
 from tasks.models import Task, TimeLog
 
+# TODO add pagination
 class TaskList(generics.ListCreateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
