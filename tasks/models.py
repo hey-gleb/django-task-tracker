@@ -6,9 +6,12 @@ from django.core.exceptions import ValidationError
 
 from projects.models import Project
 
+
 class Task(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    project = models.ForeignKey(Project, related_name='projects', on_delete=models.CASCADE)
+    project = models.ForeignKey(
+        Project, related_name="projects", on_delete=models.CASCADE
+    )
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     title = models.CharField(max_length=255)
@@ -18,7 +21,7 @@ class Task(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['created_at']
+        ordering = ["created_at"]
 
     def __str__(self):
         return self.title
@@ -27,13 +30,13 @@ class Task(models.Model):
 class TimeLog(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    task = models.ForeignKey(Task, related_name='time_logs', on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, related_name="time_logs", on_delete=models.CASCADE)
     hours_spent = models.FloatField()
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['created_at']
+        ordering = ["created_at"]
 
     def clean(self):
         if self.hours_spent < 0:
@@ -44,4 +47,4 @@ class TimeLog(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f'{self.hours_spent} on {self.task.title}'
+        return f"{self.hours_spent} on {self.task.title}"

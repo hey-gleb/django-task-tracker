@@ -23,7 +23,6 @@ class ProjectList(generics.ListCreateAPIView):
         project = serializer.save(user=self.request.user)
         project.members.add(self.request.user)
 
-
     # TODO verify different managers see different projects
     def get_queryset(self):
         return Project.objects.filter(members=self.request.user)
@@ -34,13 +33,14 @@ class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
 
+
 class AddMembersView(generics.UpdateAPIView):
     queryset = Project.objects.all()
     serializer_class = AddMembersSerializer
     permission_classes = [IsAuthenticated]  # Add permissions as needed
 
     def get_object(self):
-        project_id = self.kwargs['pk']
+        project_id = self.kwargs["pk"]
         return Project.objects.get(pk=project_id)
 
 
@@ -54,7 +54,7 @@ class ProjectTimeStatsView(APIView):
         start_data = now - timedelta(days=30)
 
         try:
-            project = Project.objects.get(id=kwargs.get('pk'))
+            project = Project.objects.get(id=kwargs.get("pk"))
         except Project.DoesNotExist:
             return Response({"detail": "Project not found."}, status=404)
 
@@ -62,11 +62,12 @@ class ProjectTimeStatsView(APIView):
         #     return Response({"detail": "You do not have permission to view this project."}, status=403)
 
         total_time = TimeLog.objects.filter(
-            task__project=project,
-            created_at__gte=start_data
-        ).aggregate(total_hours_spent=Sum('hours_spent'))
+            task__project=project, created_at__gte=start_data
+        ).aggregate(total_hours_spent=Sum("hours_spent"))
 
-        return Response({
-            "project": project.title,
-            "total_hours_spent": total_time['total_hours_spent'] or 0
-        })
+        return Response(
+            {
+                "project": project.title,
+                "total_hours_spent": total_time["total_hours_spent"] or 0,
+            }
+        )
