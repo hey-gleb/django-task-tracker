@@ -52,8 +52,10 @@ class AddMembersView(generics.UpdateAPIView):
 
 class MonthlyStatsView(APIView):
     def get(self, request, *args, **kwargs):
-        start_date = now().replace(day=1)
-        end_date = (start_date + timedelta(days=31)).replace(day=1)
+        # start_date = now().replace(day=1)
+        start_date = now() - timedelta(days=30)
+        end_date = now()
+        # end_date = (start_date + timedelta(days=31)).replace(day=1)
 
         projects = Project.objects.filter(user=self.request.user)
         aggregated_data = []

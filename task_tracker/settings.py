@@ -96,6 +96,10 @@ DATABASES = {
         "PASSWORD": "123",
         "HOST": "localhost",
         "PORT": "5432",
+        'TEST': {
+            # TODO ALTER USER task_tracker_db_user CREATEDB;
+            'NAME': 'task_tracker_db_test',
+        },
     }
 }
 
