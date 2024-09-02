@@ -68,7 +68,7 @@ class ProjectTimeStatsView(APIView):
 
         total_time = TimeLog.objects.filter(
             task__project=project,
-            logged_at__gte=start_data
+            created_at__gte=start_data
         ).aggregate(total_hours_spent=Sum('hours_spent'))
 
         return Response({

@@ -20,5 +20,4 @@ class IsDeveloperOrQA(BasePermission):
 
 class IsProjectMember(BasePermission):
     def has_object_permission(self, request, view, obj):
-        # Implement your logic to check if the user is allowed to modify the project
-        return request.user in obj.members  # Example check
+        return request.user in obj.members
