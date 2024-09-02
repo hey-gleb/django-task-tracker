@@ -1,6 +1,8 @@
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from dj_rest_auth.serializers import LoginSerializer
 from django.contrib.auth import authenticate
+from rest_framework.exceptions import ValidationError
+from django.db import IntegrityError
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 
@@ -12,6 +14,12 @@ class ProjectSerializer(serializers.ModelSerializer):
         model = Project
         fields = '__all__'
         read_only_fields = ['user']
+
+    def create(self, validated_data):
+        try:
+            return super().create(validated_data)
+        except IntegrityError:
+            raise ValidationError({'name': 'A project with this name already exists.'})
 
 
 class AddMembersSerializer(serializers.ModelSerializer):

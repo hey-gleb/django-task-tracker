@@ -49,6 +49,7 @@ class CustomRegisterView(RegisterView):
 
 class ProjectTimeStatsView(APIView):
     # TODO add manager verification
+    # TODO add endpoint to get data by users
     permission_classes = [IsAuthenticated]
 
     def get(self, request, **kwargs):
