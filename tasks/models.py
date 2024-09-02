@@ -4,6 +4,7 @@ from django.db import models
 
 from projects.models import Project
 
+# TODO rename tables
 class Task(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     project = models.ForeignKey(Project, related_name='projects', on_delete=models.CASCADE)
