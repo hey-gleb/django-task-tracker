@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'dj_rest_auth.registration',
     'dj_rest_auth',
+    'drf_yasg',
 
     # local apps
     'projects',
