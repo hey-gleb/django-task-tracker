@@ -4,14 +4,13 @@ from django.db.models import Sum
 from django.utils import timezone
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-from dj_rest_auth.registration.views import RegisterView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from projects.models import Project
 from projects.pagination import QueryPageNumberPagination
-from projects.permissions import IsManager
-from projects.serializers import ProjectSerializer, AddMembersSerializer, CustomRegisterSerializer
+from users.permissions import IsManager
+from projects.serializers import ProjectSerializer, AddMembersSerializer
 from tasks.models import TimeLog
 
 
@@ -43,10 +42,6 @@ class AddMembersView(generics.UpdateAPIView):
     def get_object(self):
         project_id = self.kwargs['pk']
         return Project.objects.get(pk=project_id)
-
-# TODO move to a separate app
-class CustomRegisterView(RegisterView):
-    serializer_class = CustomRegisterSerializer
 
 
 class ProjectTimeStatsView(APIView):
