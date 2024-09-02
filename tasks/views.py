@@ -6,7 +6,6 @@ from tasks.serializers import TaskSerializer, TimeLogSerializer
 from tasks.models import Task, TimeLog
 
 
-# TODO add pagination
 class TaskList(generics.ListCreateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
@@ -37,7 +36,6 @@ class TimeLogList(generics.ListCreateAPIView):
         task_id = self.kwargs.get("pk")
         task = Task.objects.get(id=task_id)
 
-        # Check if the user is a member of the project
         user = self.request.user
         if not task.project.members.filter(id=user.id).exists():
             raise PermissionDenied(

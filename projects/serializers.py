@@ -33,3 +33,10 @@ class AddMembersSerializer(serializers.ModelSerializer):
         instance.members.set(members)  # Add members to the project
         instance.save()
         return instance
+
+
+class MonthlyStatsSerializer(serializers.Serializer):
+    project_id = serializers.IntegerField()
+    project_title = serializers.CharField()
+    total_hours = serializers.FloatField()
+    user_stats = serializers.ListField(child=serializers.DictField())

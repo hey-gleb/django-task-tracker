@@ -13,7 +13,7 @@ schema_view = get_schema_view(
         description="Django application to track spent time on tasks completion",
     ),
     public=True,
-    permission_classes=(permissions.AllowAny,),
+    permission_classes=[permissions.AllowAny],
 )
 
 PUBLIC_API_PREFIX = "api/"
@@ -24,7 +24,7 @@ urlpatterns = [
     path(PUBLIC_API_PREFIX, include("tasks.urls")),
     path(PUBLIC_API_PREFIX + "auth/", include("dj_rest_auth.urls")),
     path(PUBLIC_API_PREFIX + "auth/registration/", CustomRegisterView.as_view()),
-    # path('accounts/', include('allauth.urls')),
+    path('accounts/', include('allauth.urls')),
     path(
         "swagger/",
         schema_view.with_ui("swagger", cache_timeout=0),

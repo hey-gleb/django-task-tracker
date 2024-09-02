@@ -1,7 +1,7 @@
 from datetime import timedelta
 
+from django.contrib.auth.models import User
 from django.db.models import Sum
-from django.utils import timezone
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -10,8 +10,13 @@ from rest_framework.views import APIView
 from projects.models import Project
 from projects.pagination import QueryPageNumberPagination
 from users.permissions import IsManager
-from projects.serializers import ProjectSerializer, AddMembersSerializer
+from projects.serializers import (
+    ProjectSerializer,
+    AddMembersSerializer,
+    MonthlyStatsSerializer,
+)
 from tasks.models import TimeLog
+from django.utils.timezone import now
 
 
 class ProjectList(generics.ListCreateAPIView):
@@ -44,30 +49,43 @@ class AddMembersView(generics.UpdateAPIView):
         return Project.objects.get(pk=project_id)
 
 
-class ProjectTimeStatsView(APIView):
-    # TODO add manager verification
-    # TODO add endpoint to get data by users
-    permission_classes = [IsAuthenticated]
 
-    def get(self, request, **kwargs):
-        now = timezone.now()
-        start_data = now - timedelta(days=30)
+class MonthlyStatsView(APIView):
+    def get(self, request, *args, **kwargs):
+        start_date = now().replace(day=1)
+        end_date = (start_date + timedelta(days=31)).replace(day=1)
 
-        try:
-            project = Project.objects.get(id=kwargs.get("pk"))
-        except Project.DoesNotExist:
-            return Response({"detail": "Project not found."}, status=404)
+        projects = Project.objects.filter(user=self.request.user)
+        aggregated_data = []
 
-        # if not project.user != self.request.user:
-        #     return Response({"detail": "You do not have permission to view this project."}, status=403)
-
-        total_time = TimeLog.objects.filter(
-            task__project=project, created_at__gte=start_data
-        ).aggregate(total_hours_spent=Sum("hours_spent"))
-
-        return Response(
-            {
-                "project": project.title,
-                "total_hours_spent": total_time["total_hours_spent"] or 0,
+        for project in projects:
+            project_data = {
+                "project_id": project.id,
+                "project_title": project.title,
+                "total_hours": TimeLog.objects.filter(
+                    task__project=project, created_at__range=[start_date, end_date]
+                ).aggregate(total_hours=Sum("hours_spent"))["total_hours"]
+                or 0,
+                "user_stats": [],
             }
-        )
+
+            users = User.objects.filter(task__project=project).distinct()
+            for user in users:
+                user_data = TimeLog.objects.filter(
+                    task__project=project,
+                    user=user,
+                    created_at__range=[start_date, end_date],
+                ).aggregate(total_hours=Sum("hours_spent"))
+
+                project_data["user_stats"].append(
+                    {
+                        "user_id": user.id,
+                        "email": user.email,
+                        "total_hours": user_data["total_hours"] or 0,
+                    }
+                )
+
+            aggregated_data.append(project_data)
+
+        serializer = MonthlyStatsSerializer(aggregated_data, many=True)
+        return Response(serializer.data)
