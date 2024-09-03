@@ -97,7 +97,7 @@ DATABASES = {
         "HOST": "localhost",
         "PORT": "5432",
         'TEST': {
-            # TODO ALTER USER task_tracker_db_user CREATEDB;
+            # TODO add user permisson to create DB ALTER USER task_tracker_db_user CREATEDB;
             'NAME': 'task_tracker_db_test',
         },
     }
@@ -148,19 +148,18 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 SITE_ID = 1
 
 # Email Backend Configuration
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# If you want to enable emails sending uncomment the following line and comment the previous one
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = "smtp.gmail.com"  # Replace with your email provider's SMTP server
 EMAIL_PORT = 587  # Common SMTP port for TLS
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = ""  # Replace with your email address
-EMAIL_HOST_PASSWORD = ""  # Replace with your email password
+EMAIL_HOST_USER = "YOUR_HOST_USER"
+EMAIL_HOST_PASSWORD = "YOUR_HOST_PASSWORD"
 DEFAULT_FROM_EMAIL = "task-tracker@gmail.com"
 
 # Django Allauth settings
-# ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_REQUIRED = True
-# TODO remove username
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_AUTHENTICATION_METHOD = "email"
@@ -179,6 +178,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
+    # Uncomment you need JSON request/response
     # 'DEFAULT_RENDERER_CLASSES': [
     #     'rest_framework.renderers.JSONRenderer',
     # ],
@@ -186,10 +186,6 @@ REST_FRAMEWORK = {
     #     'rest_framework.parsers.JSONParser',
     # ],
 }
-
-# DJANGO_REST_AUTH = {
-#     'LOGIN_SERIALIZER': 'dj_rest_auth.serializers.AllAuthLoginSerializer',
-# }
 
 REST_AUTH = {
     "SESSION_LOGIN": True,
@@ -206,8 +202,3 @@ REST_AUTH_REGISTER_SERIALIZERS = {
     "REGISTER_SERIALIZER": "projects.serializers.CustomRegisterSerializer",
 }
 
-
-# # Rest Auth settings
-# REST_AUTH_SERIALIZERS = {
-#     'LOGIN_SERIALIZER': 'your_app.serializers.CustomLoginSerializer',
-# }
